@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     padding: 20,
-    opacity: 0.6,
+    opacity: 0.7,
   },
 });
 
