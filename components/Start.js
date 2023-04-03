@@ -5,14 +5,16 @@ import {
   TextInput,
   ImageBackground,
   TouchableOpacity,
+  Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useState } from "react";
 
 const backgroundColors = {
   purple: { backgroundColor: "#474056" },
-  green: { backgroundColor: "#94ae89" },
-  blue: { backgroundColor: "#1E90FF" },
-  pink: { backgroundColor: "#FF7F50" },
+  darkBlue: { backgroundColor: "#191347" },
+  blue: { backgroundColor: "#63787D" },
+  pink: { backgroundColor: "#4E3264" },
 };
 
 const SelectedColorOverlay = () => <View style={styles.selectedColorOverlay} />;
@@ -56,6 +58,10 @@ const Start = ({ navigation }) => {
             <View style={styles.colorOptions}>{colorOptions}</View>
           </View>
           <TouchableOpacity
+            accessible={true}
+            accessibilityLabel="Start chatting"
+            accessibilityHint="Let you enter the chat"
+            accessibilityRole="button"
             style={styles.button}
             title="Start Chatting"
             onPress={() =>
@@ -66,6 +72,9 @@ const Start = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
+      {Platform.OS === "ios" ? (
+        <KeyboardAvoidingView keyboardVerticalOffset={80} behavior="padding" />
+      ) : null}
     </View>
   );
 };
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
   colorOptions: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
+    marginTop: 40,
   },
   selectedColorOverlay: {
     width: 48,
