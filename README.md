@@ -2,7 +2,7 @@
 
 ## Description 
 
-The simple mobile app that has been build with React Native using Expo, that will allow users to interact with chat interface as well as able to send images and share location.
+The mobile app that has been build with React Native using Expo, that will allow users to interact with chat interface as well as able to send images and share location.
 
 ## Techstack
 + React Native
