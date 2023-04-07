@@ -7,8 +7,6 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Bubble, GiftedChat } from "react-native-gifted-chat";
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
 import {
   collection,
   query,
@@ -17,35 +15,9 @@ import {
   orderBy,
 } from "firebase/firestore";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCYvb3W4Ic9TUbPBhQ20jwMXe-hZx_2ttk",
-//   authDomain: "chat-app-27c30.firebaseapp.com",
-//   projectId: "chat-app-27c30",
-//   storageBucket: "chat-app-27c30.appspot.com",
-//   messagingSenderId: "482424545646",
-//   appId: "1:482424545646:web:450c15cbd1d4c2ee4e617f",
-//   measurementId: "G-663HW3ZF5M",
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
-const Chat = ({ route, navigation }) => {
+const Chat = ({ route, navigation, db }) => {
   const { name, userID } = route.params;
   const [messages, setMessages] = useState([]);
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCYvb3W4Ic9TUbPBhQ20jwMXe-hZx_2ttk",
-    authDomain: "chat-app-27c30.firebaseapp.com",
-    projectId: "chat-app-27c30",
-    storageBucket: "chat-app-27c30.appspot.com",
-    messagingSenderId: "482424545646",
-    appId: "1:482424545646:web:450c15cbd1d4c2ee4e617f",
-    measurementId: "G-663HW3ZF5M",
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
 
   useEffect(() => {
     navigation.setOptions({ title: name });
@@ -66,15 +38,15 @@ const Chat = ({ route, navigation }) => {
     };
   }, []);
 
-  const onSend = (newMessages) => {
-    addDoc(collection(db, "messages"), newMessages[0]);
-  };
-
   useEffect(() => {
     let name = route.params.name;
     let color = route.params.color;
     navigation.setOptions({ title: name, headerStyle: { background: color } });
   }, []);
+
+  const onSend = (newMessages) => {
+    addDoc(collection(db, "messages"), newMessages[0]);
+  };
 
   const renderBubble = (props) => {
     return (
