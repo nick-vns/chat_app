@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
+  Alert,
 } from "react-native";
 import { useState } from "react";
+import { getAuth, signInAnonymously } from "firebase/auth";
 
 const backgroundColors = {
   purple: { backgroundColor: "#474056" },
@@ -22,6 +24,22 @@ const SelectedColorOverlay = () => <View style={styles.selectedColorOverlay} />;
 const Start = ({ navigation }) => {
   const [name, setName] = useState("");
   const [color, setColor] = useState("");
+  const auth = getAuth();
+
+  const handleSignIn = () => {
+    signInAnonymously(auth)
+      .then((result) => {
+        navigation.navigate("Chat", {
+          name: name,
+          color: color,
+          userID: result.user.uid,
+        });
+        Alert.alert("Signed in Successfully");
+      })
+      .catch((error) => {
+        Alert.alert("Something went wrong. Try again");
+      });
+  };
 
   const image = {
     uri: "https://img.freepik.com/free-vector/vector-social-contact-seamless-pattern-white-blue_1284-41919.jpg",
@@ -64,9 +82,7 @@ const Start = ({ navigation }) => {
             accessibilityRole="button"
             style={styles.button}
             title="Start Chatting"
-            onPress={() =>
-              navigation.navigate("Chat", { name: name, color: color })
-            }
+            onPress={handleSignIn}
           >
             <Text style={styles.buttonText}>Start Chatting</Text>
           </TouchableOpacity>
