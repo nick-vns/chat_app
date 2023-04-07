@@ -7,16 +7,74 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Bubble, GiftedChat } from "react-native-gifted-chat";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  addDoc,
+  orderBy,
+} from "firebase/firestore";
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyCYvb3W4Ic9TUbPBhQ20jwMXe-hZx_2ttk",
+//   authDomain: "chat-app-27c30.firebaseapp.com",
+//   projectId: "chat-app-27c30",
+//   storageBucket: "chat-app-27c30.appspot.com",
+//   messagingSenderId: "482424545646",
+//   appId: "1:482424545646:web:450c15cbd1d4c2ee4e617f",
+//   measurementId: "G-663HW3ZF5M",
+// };
+
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
 
 const Chat = ({ route, navigation }) => {
-  const { name } = route.params;
+  const { name, userID } = route.params;
   const [messages, setMessages] = useState([]);
 
-  const onSend = (newMessages) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, newMessages)
-    );
+  const firebaseConfig = {
+    apiKey: "AIzaSyCYvb3W4Ic9TUbPBhQ20jwMXe-hZx_2ttk",
+    authDomain: "chat-app-27c30.firebaseapp.com",
+    projectId: "chat-app-27c30",
+    storageBucket: "chat-app-27c30.appspot.com",
+    messagingSenderId: "482424545646",
+    appId: "1:482424545646:web:450c15cbd1d4c2ee4e617f",
+    measurementId: "G-663HW3ZF5M",
   };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  useEffect(() => {
+    navigation.setOptions({ title: name });
+    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+    const unsubMessages = onSnapshot(q, (docs) => {
+      let newMessages = [];
+      docs.forEach((doc) => {
+        newMessages.push({
+          id: doc.id,
+          ...doc.data(),
+          createdAt: new Date(doc.data().createdAt.toMillis()),
+        });
+      });
+      setMessages(newMessages);
+    });
+    return () => {
+      if (unsubMessages) unsubMessages();
+    };
+  }, []);
+
+  const onSend = (newMessages) => {
+    addDoc(collection(db, "messages"), newMessages[0]);
+  };
+
+  useEffect(() => {
+    let name = route.params.name;
+    let color = route.params.color;
+    navigation.setOptions({ title: name, headerStyle: { background: color } });
+  }, []);
 
   const renderBubble = (props) => {
     return (
@@ -49,33 +107,6 @@ const Chat = ({ route, navigation }) => {
     );
   };
 
-  useEffect(() => {
-    let name = route.params.name;
-    let color = route.params.color;
-    navigation.setOptions({ title: name, headerStyle: { background: color } });
-  }, []);
-
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-      {
-        _id: 2,
-        text: "This is a system mesage",
-        createdAt: new Date(),
-        system: true,
-      },
-    ]);
-  }, []);
-
   return (
     <View style={[styles.container, { backgroundColor: route.params.color }]}>
       <GiftedChat
@@ -84,7 +115,8 @@ const Chat = ({ route, navigation }) => {
         onSend={(messages) => onSend(messages)}
         renderTime={renderTime}
         user={{
-          _id: 1,
+          _id: userID,
+          name,
         }}
       />
       {Platform.OS === "android" ? (
