@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     width: "80%",
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 20,
+    paddingBottom: 30,
   },
   button: {
     height: 50,
@@ -114,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
+    marginTop: -20,
     marginBottom: 20,
     shadowColor: "white",
     shadowOffset: { width: 2, height: 2 },
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
   colorOptions: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 40,
+    marginTop: 20,
   },
   selectedColorOverlay: {
     width: 48,
