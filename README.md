@@ -29,3 +29,6 @@ The mobile app that has been build with React Native using Expo, that will allow
     "expo-image-picker": "~14.1.1",
     "expo-location": "~15.1.1",
     "react-native-maps": "1.3.2"
+
+## Screenshots
+![Home page](home.png)
