@@ -31,4 +31,5 @@ The mobile app that has been build with React Native using Expo, that will allow
     "react-native-maps": "1.3.2"
 
 ## Screenshots
-![Home page](home.png)
+![Home page](home.jpg)
+![Chat page](chat.jpg)
