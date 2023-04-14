@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     width: "80%",
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 20,
-    paddingBottom: 30,
+    paddingBottom: 20,
   },
   button: {
     height: 50,
@@ -145,13 +145,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     color: "#000080",
-    marginBottom: 10,
+    marginBottom: 25,
     marginTop: "10%",
   },
   colorOptions: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
+    marginTop: 0,
   },
   selectedColorOverlay: {
     width: 48,
