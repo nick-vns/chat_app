@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import Start from "./components/Start";
 import Chat from "./components/Chat";
 import { NavigationContainer } from "@react-navigation/native";
@@ -11,7 +10,7 @@ import {
   disableNetwork,
   enableNetwork,
 } from "firebase/firestore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getStorage } from "firebase/storage";
 import { useNetInfo } from "@react-native-community/netinfo";
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +38,7 @@ const App = () => {
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const storage = getStorage(app);
 
   return (
     <NavigationContainer>
@@ -49,6 +49,7 @@ const App = () => {
             <Chat
               isConnected={connectionStatus.isConnected}
               db={db}
+              storage={storage}
               {...props}
             />
           )}

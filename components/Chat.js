@@ -4,6 +4,7 @@ import {
   Platform,
   Text,
   KeyboardAvoidingView,
+  Button,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
@@ -15,8 +16,10 @@ import {
   orderBy,
 } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomActions from "./CustomActions";
+import MapView from "react-native-maps";
 
-const Chat = ({ route, navigation, db, isConnected }) => {
+const Chat = ({ route, navigation, db, isConnected, storage }) => {
   const { name, userID } = route.params;
   const [messages, setMessages] = useState([]);
   let unsubMessages;
@@ -107,6 +110,35 @@ const Chat = ({ route, navigation, db, isConnected }) => {
     );
   };
 
+  const renderCustomActions = (props) => {
+    return (
+      <CustomActions
+        onSend={onSend}
+        userID={userID}
+        storage={storage}
+        {...props}
+      />
+    );
+  };
+
+  const renderCustomView = (props) => {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 150, height: 100, borderRadius: 13, margin: 3 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: route.params.color }]}>
       <GiftedChat
@@ -114,6 +146,8 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         renderBubble={renderBubble}
         renderTime={renderTime}
         renderInputToolbar={renderInputToolbar}
+        renderActions={renderCustomActions}
+        renderCustomView={renderCustomView}
         onSend={(messages) => onSend(messages)}
         user={{
           _id: userID,
@@ -130,6 +164,7 @@ const Chat = ({ route, navigation, db, isConnected }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 6,
   },
 });
 
